@@ -22,6 +22,7 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class CoreApplication extends SpringBootServletInitializer
 {
+    //新版本的mybatis需要加入以下部分，否则会找不到datasource
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
         return builder.sources(this.getClass());
@@ -46,7 +47,6 @@ public class CoreApplication extends SpringBootServletInitializer
     public PlatformTransactionManager transactionManager() {
         return new DataSourceTransactionManager(dataSource());
     }
-
 
     public static void main(String[] args) {
         SpringApplication.run(CoreApplication.class, args);

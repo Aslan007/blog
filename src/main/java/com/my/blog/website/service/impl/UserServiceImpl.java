@@ -58,6 +58,7 @@ public class UserServiceImpl implements IUserService {
             throw new TipException("不存在该用户");
         }
         String pwd = TaleUtils.MD5encode(username+password);
+        //判断密码是否相等，criteria，可以使用mybatis的条件查询
         criteria.andPasswordEqualTo(pwd);
         List<UserVo> userVos = userDao.selectByExample(example);
         if (userVos.size()!=1) {

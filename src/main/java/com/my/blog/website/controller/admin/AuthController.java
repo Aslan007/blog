@@ -65,13 +65,17 @@ public class AuthController extends BaseController {
 
         Integer error_count = cache.get("login_error_count");
         try {
+            //验证登录信息
             UserVo user = usersService.login(username, password);
             request.getSession().setAttribute(WebConst.LOGIN_SESSION_KEY, user);
             if (StringUtils.isNotBlank(remeber_me)) {
+                //设置cookie
                 TaleUtils.setCookie(response, user.getUid());
             }
+            //插入日志
             logService.insertLog(LogActions.LOGIN.getAction(), null, request.getRemoteAddr(), user.getUid());
         } catch (Exception e) {
+            //cookie记录错误次数，错误超过三次弹出提醒
             error_count = null == error_count ? 1 : error_count + 1;
             if (error_count > 3) {
                 return RestResponseBo.fail("您输入密码已经错误超过3次，请10分钟后尝试");
